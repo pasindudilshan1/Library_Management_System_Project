@@ -9,16 +9,25 @@
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com/example/library_system/Controller/view_book.java"
-            prefHeight="400.0" prefWidth="600.0">
-    <TableView fx:id="tableview" layoutX="10.0" layoutY="10.0"  prefHeight="280.0" prefWidth="380.0">
+            prefHeight="600.0" prefWidth="800.0">
+    <Label layoutX="10.0" layoutY="10.0" text="Available Books"/>
+    <TableView fx:id="tableView" layoutX="10.0" layoutY="30.0" prefHeight="250.0" prefWidth="780.0">
         <columns>
             <TableColumn fx:id="book_IdField" text="Book ID" prefWidth="100.0"> </TableColumn>
-            <TableColumn fx:id="titleField" text="Book Title" prefWidth="180"/>
-            <TableColumn fx:id="authorField" text="Author of Book" prefWidth="180"/>
-            <TableColumn fx:id="genreField" text="Genre of Book" prefWidth="180"/>
-            <TableColumn fx:id="copiesField" text="Copies of Book" prefWidth="100"/>
-
+            <TableColumn fx:id="titleField" text="Book Title" prefWidth="200.0"/>
+            <TableColumn fx:id="authorField" text="Author of Book" prefWidth="150.0"/>
+            <TableColumn fx:id="genreField" text="Genre of Book" prefWidth="150.0"/>
+            <TableColumn fx:id="copiesField" text="Available Copies" prefWidth="120.0"/>
         </columns>
     </TableView>
 
+    <Label layoutX="10.0" layoutY="300.0" text="Members"/>
+    <TableView fx:id="membersTable" layoutX="10.0" layoutY="320.0" prefHeight="250.0" prefWidth="780.0">
+        <columns>
+            <TableColumn fx:id="memberIdColumn" text="Member ID" prefWidth="100.0"/>
+            <TableColumn fx:id="firstNameColumn" text="First Name" prefWidth="150.0"/>
+            <TableColumn fx:id="lastNameColumn" text="Last Name" prefWidth="150.0"/>
+            <TableColumn fx:id="emailColumn" text="Email" prefWidth="200.0"/>
+        </columns>
+    </TableView>
 </AnchorPane>

@@ -1,23 +1,128 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.DatePicker?>
 
-<GridPane xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="com.example.library_system.Controller.Return_book"
-          alignment="center" hgap="10" vgap="10">
-    <Label text="Member Identity" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-    <TextField fx:id="member_IdField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-    <Label text="Return Date" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-    <DatePicker fx:id="return_DateField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+<BorderPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.library_system.Controller.Return_book">
+   <top>
+      <VBox spacing="15" style="-fx-padding: 20;">
+         <Label text="📥 Return Books" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+         <Label text="Select an issued book to return or search by book/member ID" style="-fx-text-fill: #666;" />
+      </VBox>
+   </top>
 
-    <Button text="Update Return" onAction="#addReturn" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+   <center>
+      <HBox spacing="20" style="-fx-padding: 20;">
+         
+         <!-- Return Form Panel -->
+         <VBox spacing="20" prefWidth="400" style="-fx-background-color: #f8f9fa; -fx-padding: 20; -fx-background-radius: 10;">
+            <Label text="📋 Return Details" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+            
+            <!-- Quick Search -->
+            <VBox spacing="10">
+               <Label text="Quick Search:" style="-fx-font-weight: bold;" />
+               <HBox spacing="10">
+                  <TextField fx:id="searchField" promptText="Enter Book ID or Member ID" prefWidth="200" />
+                  <Button text="🔍 Search" onAction="#searchIssueRecord" />
+               </HBox>
+            </VBox>
+            
+            <Separator />
+            
+            <!-- Return Form -->
+            <GridPane hgap="15" vgap="15">
+               <columnConstraints>
+                  <ColumnConstraints minWidth="120" />
+                  <ColumnConstraints minWidth="220" />
+               </columnConstraints>
 
-</GridPane>
+               <Label text="Issue Record:" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-weight: bold;" />
+               <ComboBox fx:id="issueRecordComboBox" GridPane.rowIndex="0" GridPane.columnIndex="1" 
+                        promptText="Select issue record" prefWidth="220" />
+
+               <Label text="Return Date:" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-font-weight: bold;" />
+               <DatePicker fx:id="returnDatePicker" GridPane.rowIndex="1" GridPane.columnIndex="1" 
+                          prefWidth="220" />
+
+               <Label text="Notes:" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-font-weight: bold;" />
+               <TextArea fx:id="returnNotesField" GridPane.rowIndex="2" GridPane.columnIndex="1" 
+                        promptText="Optional return notes" prefRowCount="3" prefWidth="220" />
+            </GridPane>
+
+            <!-- Return Button -->
+            <HBox alignment="CENTER">
+               <Button fx:id="returnButton" text="📥 Return Book" onAction="#returnBook" 
+                      style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-size: 14px; -fx-min-width: 150; -fx-min-height: 35;" 
+                      disable="true" />
+            </HBox>
+
+            <!-- Issue Information Display -->
+            <VBox spacing="10" style="-fx-background-color: #fff3e0; -fx-padding: 15; -fx-background-radius: 5;">
+               <Label text="📋 Issue Information" style="-fx-font-weight: bold; -fx-text-fill: #f57c00;" />
+               <Label fx:id="issueBookLabel" text="Book: Not selected" style="-fx-text-fill: #666;" />
+               <Label fx:id="issueMemberLabel" text="Member: Not selected" style="-fx-text-fill: #666;" />
+               <Label fx:id="issueDateLabel" text="Issue Date: -" style="-fx-text-fill: #666;" />
+               <Label fx:id="dueDateLabel" text="Due Date: -" style="-fx-text-fill: #666;" />
+               <Label fx:id="daysOverdueLabel" text="Days Overdue: -" style="-fx-text-fill: #666;" />
+               <Label fx:id="fineAmountLabel" text="Fine Amount: Rs. 0.00" style="-fx-text-fill: #d32f2f; -fx-font-weight: bold;" />
+            </VBox>
+         </VBox>
+
+         <!-- Issued Books Table Panel -->
+         <VBox spacing="15" VBox.vgrow="ALWAYS">
+            
+            <!-- Currently Issued Books -->
+            <VBox spacing="10">
+               <HBox alignment="CENTER_LEFT" spacing="10">
+                  <Label text="📋 Currently Issued Books" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+                  <TextField fx:id="issuedBooksSearchField" promptText="Search issued books..." prefWidth="200" />
+                  <Button text="🔍" onAction="#searchIssuedBooks" />
+                  <Button text="🔄" onAction="#refreshIssuedBooks" />
+                  <Button text="⚠️ Overdue Only" onAction="#showOverdueOnly" style="-fx-background-color: #ffcdd2;" />
+               </HBox>
+               
+               <TableView fx:id="issuedBooksTable" prefHeight="350" VBox.vgrow="ALWAYS">
+                  <columns>
+                     <TableColumn fx:id="issueIdColumn" text="Issue ID" prefWidth="80" />
+                     <TableColumn fx:id="issuedBookIdColumn" text="Book ID" prefWidth="80" />
+                     <TableColumn fx:id="issuedBookTitleColumn" text="Book Title" prefWidth="180" />
+                     <TableColumn fx:id="issuedMemberIdColumn" text="Member ID" prefWidth="90" />
+                     <TableColumn fx:id="issuedMemberNameColumn" text="Member Name" prefWidth="150" />
+                     <TableColumn fx:id="issueDateColumn" text="Issue Date" prefWidth="100" />
+                     <TableColumn fx:id="dueDateColumn" text="Due Date" prefWidth="100" />
+                     <TableColumn fx:id="daysOverdueColumn" text="Days Overdue" prefWidth="100" />
+                     <TableColumn fx:id="fineColumn" text="Fine (Rs.)" prefWidth="90" />
+                     <TableColumn fx:id="statusColumn" text="Status" prefWidth="90" />
+                  </columns>
+                  <placeholder>
+                     <Label text="No issued books found" style="-fx-text-fill: #888;" />
+                  </placeholder>
+               </TableView>
+            </VBox>
+
+            <!-- Summary Stats -->
+            <HBox spacing="15" alignment="CENTER" style="-fx-background-color: #e1f5fe; -fx-padding: 10; -fx-background-radius: 5;">
+               <VBox alignment="CENTER" spacing="2">
+                  <Label fx:id="totalIssuedLabel" text="0" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #0277bd;" />
+                  <Label text="Total Issued" style="-fx-font-size: 12px; -fx-text-fill: #666;" />
+               </VBox>
+               <VBox alignment="CENTER" spacing="2">
+                  <Label fx:id="overdueCountLabel" text="0" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #d32f2f;" />
+                  <Label text="Overdue Books" style="-fx-font-size: 12px; -fx-text-fill: #666;" />
+               </VBox>
+               <VBox alignment="CENTER" spacing="2">
+                  <Label fx:id="totalFinesLabel" text="Rs. 0.00" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #f57c00;" />
+                  <Label text="Total Fines" style="-fx-font-size: 12px; -fx-text-fill: #666;" />
+               </VBox>
+            </HBox>
+         </VBox>
+      </HBox>
+   </center>
+
+   <bottom>
+      <HBox alignment="CENTER_LEFT" style="-fx-background-color: #f5f5f5; -fx-padding: 10;">
+         <Label fx:id="statusLabel" text="Ready to process returns" style="-fx-text-fill: #666;" />
+      </HBox>
+   </bottom>
+</BorderPane>

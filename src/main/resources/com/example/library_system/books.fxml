@@ -1,31 +1,118 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.DatePicker?>
-<GridPane xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="com.example.library_system.Controller.BookController"
-          alignment="center" hgap="10" vgap="10">
+<BorderPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.library_system.Controller.BookController">
+   <top>
+      <VBox spacing="15" style="-fx-padding: 20;">
+         <Label text="📚 Books Management" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+         
+         <!-- Search and Action Bar -->
+         <HBox alignment="CENTER_LEFT" spacing="15">
+            <TextField fx:id="searchField" promptText="Search books by title, author, or genre..." prefWidth="300" />
+            <Button fx:id="searchButton" text="🔍 Search" onAction="#searchBooks" />
+            <Button fx:id="clearButton" text="🧹 Clear" onAction="#clearFields" />
+            <Button fx:id="refreshButton" text="🔄 Refresh" onAction="#refreshBooks" />
+            <Button fx:id="addButton" text="➕ Add New Book" onAction="#addBook" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" />
+         </HBox>
+      </VBox>
+   </top>
 
-<Label text="Book Identity" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-    <TextField fx:id="book_IdField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-    <Label text="Book Title" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-    <TextField fx:id="titleField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-    <Label text="Author of Book" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-    <TextField fx:id="authorField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
-    <Label text="Genre of Book" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-    <TextField fx:id="genreField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-    <Label text="Copies of Book" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-    <TextField fx:id="copiesField" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+   <center>
+      <SplitPane dividerPositions="0.35" orientation="HORIZONTAL">
+         
+         <!-- Book Form Panel -->
+         <VBox spacing="15" style="-fx-padding: 20;">
+            <Label text="Book Information" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+            
+            <GridPane hgap="10" vgap="15">
+               <columnConstraints>
+                  <ColumnConstraints minWidth="120" />
+                  <ColumnConstraints minWidth="200" />
+               </columnConstraints>
 
-    <Button text="Add Book to the System" onAction="#addBook" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+               <Label text="Book ID:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+               <TextField fx:id="bookIdField" GridPane.rowIndex="0" GridPane.columnIndex="1" 
+                         style="-fx-background-color: #f0f0f0;" editable="false" />
 
+               <Label text="Title:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+               <TextField fx:id="titleField" GridPane.rowIndex="1" GridPane.columnIndex="1" 
+                         promptText="Enter book title" />
 
+               <Label text="Author:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+               <TextField fx:id="authorField" GridPane.rowIndex="2" GridPane.columnIndex="1" 
+                         promptText="Enter author name" />
 
-</GridPane>
+               <Label text="Genre:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+               <TextField fx:id="genreField" GridPane.rowIndex="3" GridPane.columnIndex="1" 
+                         promptText="Enter book genre" />
+
+               <Label text="Total Copies:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+               <TextField fx:id="totalCopiesField" GridPane.rowIndex="4" GridPane.columnIndex="1" 
+                         promptText="Enter total number of copies" />
+
+               <Label text="Available Copies:" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+               <TextField fx:id="availableCopiesField" GridPane.rowIndex="5" GridPane.columnIndex="1" 
+                         promptText="Enter available copies" />
+
+               <Label text="ISBN:" GridPane.rowIndex="6" GridPane.columnIndex="0" />
+               <TextField fx:id="isbnField" GridPane.rowIndex="6" GridPane.columnIndex="1" 
+                         promptText="Enter ISBN (optional)" />
+
+               <Label text="Publication Year:" GridPane.rowIndex="7" GridPane.columnIndex="0" />
+               <TextField fx:id="publicationYearField" GridPane.rowIndex="7" GridPane.columnIndex="1" 
+                         promptText="Enter publication year" />
+
+               <Label text="Publisher:" GridPane.rowIndex="8" GridPane.columnIndex="0" />
+               <TextField fx:id="publisherField" GridPane.rowIndex="8" GridPane.columnIndex="1" 
+                         promptText="Enter publisher name (optional)" />
+            </GridPane>
+            
+            <!-- Action Buttons -->
+            <HBox spacing="10" alignment="CENTER">
+               <Button fx:id="addButton" text="➕ Add Book" onAction="#addBook" 
+                      style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-min-width: 100;" />
+               <Button fx:id="updateButton" text="✏️ Update" onAction="#updateBook" disable="true"
+                      style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-min-width: 100;" />
+               <Button fx:id="deleteButton" text="🗑️ Delete" onAction="#deleteBook" disable="true"
+                      style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-min-width: 100;" />
+            </HBox>
+
+            <!-- Status Information -->
+            <VBox spacing="5" style="-fx-background-color: #f9f9f9; -fx-padding: 10; -fx-background-radius: 5;">
+               <Label text="📊 Book Status" style="-fx-font-weight: bold;" />
+               <Label fx:id="bookStatusLabel" text="Ready to add new book" style="-fx-text-fill: #666;" />
+            </VBox>
+         </VBox>
+
+         <!-- Books Table Panel -->
+         <VBox spacing="15" style="-fx-padding: 20;">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+               <Label text="Books List" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+               <Label fx:id="bookCountLabel" text="(0 books)" style="-fx-text-fill: #666;" />
+            </HBox>
+            
+            <TableView fx:id="booksTable" VBox.vgrow="ALWAYS">
+               <columns>
+                  <TableColumn fx:id="idColumn" text="Book ID" prefWidth="80" />
+                  <TableColumn fx:id="titleColumn" text="Title" prefWidth="180" />
+                  <TableColumn fx:id="authorColumn" text="Author" prefWidth="140" />
+                  <TableColumn fx:id="genreColumn" text="Genre" prefWidth="100" />
+                  <TableColumn fx:id="totalCopiesColumn" text="Total" prefWidth="60" />
+                  <TableColumn fx:id="availableCopiesColumn" text="Available" prefWidth="80" />
+               </columns>
+               <placeholder>
+               
+                  <Label text="No books found. Click 'Add New Book' to get started." style="-fx-text-fill: #888;" />
+               </placeholder>
+            </TableView>
+
+            <!-- Quick Stats -->
+            
+         </VBox>
+      </SplitPane>
+   </center>
+</BorderPane>
 

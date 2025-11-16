@@ -1,105 +1,157 @@
-# 📚 Library_System
+# 📚 Library Management System
 
-A JavaFX-based library management application to manage books, members, and issue records.
+A comprehensive library management system built with JavaFX and MySQL, demonstrating core programming concepts including object-oriented programming, database integration, and proper software architecture patterns.
 
 ## 🔧 Features
 
-- Add books
-- Register and manage members
-- Issue and return books with status tracking
--Updating soon...
+### Core Functionality
+- **Book Management**: Add, update, delete, and search books with comprehensive validation
+- **Member Management**: Manage library members with email validation and status tracking
+- **Issue/Return System**: Track book borrowing with automatic due dates and fine calculation
+- **Real-time Availability**: Track available vs. issued book copies with automatic updates
+- **Overdue Tracking**: Automatic fine calculation for overdue books (Rs. 5 per day)
+- **Advanced Search**: Search across books by title, author, genre with filtering
+
+### Technical Highlights
+- **Object-Oriented Design**: Proper encapsulation, inheritance, and polymorphism
+- **Data Validation**: Comprehensive input validation with custom exceptions
+- **DAO Pattern**: Clean separation between data access and business logic
+- **Database Transactions**: ACID compliance for critical operations like book issue/return
+- **Modern Java Features**: LocalDate/LocalDateTime, Optional, BigDecimal for precision
+- **JavaFX GUI**: User-friendly graphical interface with proper event handling
 
 ## 🛠️ Prerequisites
 
-- Java 17 or higher
-- JavaFX SDK (or Maven-managed)
-- MySQL (or MariaDB) server
-- Maven 3.x
+### Required Software
+1. **Java 17 or higher** - Download from [Oracle JDK](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) or [OpenJDK](https://openjdk.java.net/)
+2. **XAMPP** (for MySQL database) - Download from [Apache Friends](https://www.apachefriends.org/)
+3. **IntelliJ IDEA** (Community Edition is free) - Download from [JetBrains](https://www.jetbrains.com/idea/download/)
 
-## 🚀 Setup & Run
+### XAMPP Setup
+1. Download and install XAMPP
+2. Start Apache and MySQL services from XAMPP Control Panel
+3. Open phpMyAdmin (usually at http://localhost/phpmyadmin)
 
-1. **Clone repository**
-   ```bash
-   git clone https://github.com/pasindudilshan1/Library_System.git
-   cd Library_System
-   ```
+## 📥 Downloading and Installing IntelliJ IDEA
 
-2. **Configure database**
-   - Create the database and tables using the SQL script below (or run `sql/library_schema.sql`).
-   - Update JDBC connection settings in your code (`DBConnection.java`).
+1. Go to the [IntelliJ IDEA download page](https://www.jetbrains.com/idea/download/)
+2. Choose the Community Edition (free and open-source)
+3. Download the installer for your operating system (Windows, macOS, or Linux)
+4. Run the installer and follow the setup wizard
+5. Launch IntelliJ IDEA after installation
 
-3. **Build & Run**
-   ```bash
-   mvn clean javafx:run
-   ```
+## 🚀 Setup and Run via IntelliJ IDEA
 
----
+
+```
+
+### 2. Open the Project in IntelliJ IDEA
+1. Launch IntelliJ IDEA
+2. Click on "Open" from the welcome screen
+3. Navigate to the cloned `Library_System` folder and select it
+4. IntelliJ will automatically detect it as a Maven project and import it
+
+### 3. Configure JDK
+1. In IntelliJ, go to `File` > `Project Structure`
+2. Under `Project SDK`, ensure Java 17 is selected
+3. If not available, click `Add SDK` > `Download JDK` and download Java 17
+
+### 4. Database Setup
+1. Open phpMyAdmin in your web browser
+2. Click "New" to create a new database
+3. Name it `library_system`
+4. Set collation to `utf8mb4_general_ci`
+5. Click "Create"
+
+### 5. Import Database Schema
+1. Select the `library_system` database
+2. Click on the "Import" tab
+3. Choose the `database_schema.sql` file from the project root
+4. Click "Go" to execute the script
+
+This creates all necessary tables with sample data and triggers for automatic inventory management.
+
+### 6. Run the Application
+1. In IntelliJ, expand the project structure in the left pane
+2. Navigate to `src/main/java/com/example/library_system/Main.java`
+3. Right-click on `Main.java` and select `Run 'Main.main()'`
+4. Alternatively, you can use the Maven tool window:
+   - Open the Maven tool window (View > Tool Windows > Maven)
+   - Expand the project
+   - Right-click on `Plugins > javafx > javafx:run` and select "Run"
+
+The application will start and open the JavaFX GUI window.
 
 ## 🗃️ Database Schema
 
-Run the following SQL in your MySQL client (e.g., phpMyAdmin, MySQL Workbench, or CLI) to create the database and tables.
+The system uses a comprehensive database schema with the following tables:
 
-```sql
--- Create database
-CREATE DATABASE IF NOT EXISTS library_db;
-USE library_db;
+### Books Table
+- **book_id** (VARCHAR): Primary key with format B001, B002...
+- **title** (VARCHAR): Book title with validation
+- **author** (VARCHAR): Author name
+- **genre** (VARCHAR): Book category
+- **total_copies** (INT): Total number of copies
+- **available_copies** (INT): Currently available copies
+- **isbn** (VARCHAR): International Standard Book Number
+- **publication_year** (YEAR): Year of publication
+- **publisher** (VARCHAR): Publishing house
+- Timestamps for created_at and updated_at
 
--- Books table
-CREATE TABLE IF NOT EXISTS book (
-  book_id VARCHAR(10) PRIMARY KEY,
-  title   VARCHAR(30),
-  author  VARCHAR(30),
-  genre   VARCHAR(30),
-  copies  INT(12)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+### Members Table
+- **member_id** (VARCHAR): Primary key with format M001, M002...
+- **first_name** (VARCHAR): First name with capitalization
+- **last_name** (VARCHAR): Last name with capitalization
+- **email** (VARCHAR): Unique email with validation
+- **phone** (VARCHAR): Phone number with format validation
+- **address** (TEXT): Full address
+- **membership_date** (DATE): Registration date
+- **is_active** (BOOLEAN): Account status
+- Timestamps for tracking
 
--- Members table
-CREATE TABLE IF NOT EXISTS member (
-  member_id VARCHAR(12) PRIMARY KEY,
-  f_name    VARCHAR(20),
-  l_name    VARCHAR(20),
-  email     VARCHAR(30),
-  phone     VARCHAR(10),
-  address   VARCHAR(30)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+### Issue Records Table
+- **issue_id** (INT): Auto-generated primary key
+- **book_id** (VARCHAR): Foreign key to books table
+- **member_id** (VARCHAR): Foreign key to members table
+- **issue_date** (DATE): Date book was issued
+- **due_date** (DATE): Return due date (default 14 days)
+- **return_date** (DATE): Actual return date (nullable)
+- **fine_amount** (DECIMAL): Calculated fine for overdue returns
+- **status** (ENUM): ISSUED, RETURNED, or OVERDUE
+- **notes** (TEXT): Additional comments
+- Automatic timestamps
 
--- Issue records table
-CREATE TABLE IF NOT EXISTS issuerecord (
-  issue_id    VARCHAR(10) PRIMARY KEY,
-  book_id     VARCHAR(10),
-  member_id   VARCHAR(12),
-  issue_Date  DATE,
-  return_Date DATE,
-  status      VARCHAR(20),
-  FOREIGN KEY (book_id)   REFERENCES book(book_id)   ON DELETE CASCADE,
-  FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+## 🏗️ Architecture Overview
+
+### Project Structure
+```
+src/main/java/com/example/library_system/
+├── Controller/          # JavaFX Controllers
+│   ├── BookController.java      # Book management operations
+│   ├── MemberController.java    # Member management
+│   ├── IssueController.java     # Book issue operations
+│   └── Return_book.java         # Book return operations
+├── Database/           # Data Access Layer
+│   ├── DAO.java                 # Generic DAO interface
+│   ├── DBConnection.java        # Database connection management
+│   ├── BookDAO.java            # Book CRUD operations
+│   ├── MemberDAO.java          # Member CRUD operations
+│   └── IssueRecordDAO.java     # Issue/Return transactions
+├── Models/             # Entity Classes
+│   ├── Book.java               # Book entity with validation
+│   ├── Member.java             # Member entity with validation
+│   ├── IssueRecord.java        # Issue record with business logic
+│   └── Availability.java       # Book availability tracking
+└── Main.java          # Application entry point
+
+src/main/resources/
+├── application.properties      # Database configuration
+└── com/example/library_system/
+    ├── books.fxml             # Book management UI
+    ├── members.fxml           # Member management UI
+    ├── issue.fxml             # Book issue UI
+    ├── Return.fxml            # Book return UI
+    └── main.fxml              # Main dashboard
 ```
 
-Place this script in `sql/library_schema.sql` for version control.
-
----
-
-## 📝 Configuration
-
-Edit the database connection in `src/main/resources/application.properties `:
-
-```java
-db.url=jdbc:mysql://localhost:3306/library_db
-db.username=root
-db.password=""
-
-```
-
----
-
-## 🤝 Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) and [Code of Conduct.md](Code of Conduct.md).
-
----
-
-## 📄 License
-
-MIT © pasindudilshan1
-
+## 💡 Core Programming Concepts Demonstrated

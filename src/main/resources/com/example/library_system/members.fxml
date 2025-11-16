@@ -1,33 +1,116 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.DatePicker?>
+<BorderPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.library_system.Controller.MemberController">
+   <top>
+      <VBox spacing="15" style="-fx-padding: 20;">
+         <Label text="👥 Members Management" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+         
+         <!-- Search and Action Bar -->
+         <HBox alignment="CENTER_LEFT" spacing="15">
+            <TextField fx:id="searchField" promptText="Search members by name or email..." prefWidth="300" />
+            <Button fx:id="searchButton" text="🔍 Search" onAction="#searchMembers" />
+            <Button fx:id="clearButton" text="🧹 Clear" onAction="#clearFields" />
+            <Button fx:id="addButton" text="➕ Add New Member" onAction="#addMember" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" />
+         </HBox>
+      </VBox>
+   </top>
 
-<GridPane xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="com.example.library_system.Controller.MemberController"
-          alignment="center" hgap="10" vgap="10">
-    <Label text="Member Identity" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-    <TextField fx:id="member_IdField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-    <Label text="First name of the Member" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-    <TextField fx:id="f_nameField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-    <Label text="Last name of the member" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-    <TextField fx:id="l_nameField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
-    <Label text="E-mail of the member" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-    <TextField fx:id="emailField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-    <Label text="Contact no. of member" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-    <TextField fx:id="phoneField" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+   <center>
+      <SplitPane dividerPositions="0.35" orientation="HORIZONTAL">
+         
+         <!-- Member Form Panel -->
+         <VBox spacing="15" style="-fx-padding: 20;">
+            <Label text="Member Information" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+            
+            <GridPane hgap="10" vgap="15">
+               <columnConstraints>
+                  <ColumnConstraints minWidth="120" />
+                  <ColumnConstraints minWidth="200" />
+               </columnConstraints>
 
-    <Label text="Address of member" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
-    <TextField fx:id="addressField" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+               <Label text="Member ID:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+               <TextField fx:id="memberIdField" GridPane.rowIndex="0" GridPane.columnIndex="1" 
+                         style="-fx-background-color: #f0f0f0;" editable="false" />
 
-    <Button text="Add Member to the System" onAction="#addMember" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+               <Label text="First Name:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+               <TextField fx:id="firstNameField" GridPane.rowIndex="1" GridPane.columnIndex="1" 
+                         promptText="Enter first name" />
 
+               <Label text="Last Name:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+               <TextField fx:id="lastNameField" GridPane.rowIndex="2" GridPane.columnIndex="1" 
+                         promptText="Enter last name" />
 
+               <Label text="Email:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+               <TextField fx:id="emailField" GridPane.rowIndex="3" GridPane.columnIndex="1" 
+                         promptText="Enter email address" />
 
-</GridPane>
+               <Label text="Phone:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+               <TextField fx:id="phoneField" GridPane.rowIndex="4" GridPane.columnIndex="1" 
+                         promptText="Enter phone number" />
+
+               <Label text="Address:" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+               <TextArea fx:id="addressField" GridPane.rowIndex="5" GridPane.columnIndex="1" 
+                        promptText="Enter full address" prefRowCount="3" />
+
+               <Label text="Status:" GridPane.rowIndex="6" GridPane.columnIndex="0" />
+               <CheckBox fx:id="activeCheckBox" text="Active Member" GridPane.rowIndex="6" GridPane.columnIndex="1" 
+                        selected="true" />
+            </GridPane>
+            
+            <!-- Action Buttons -->
+            <HBox spacing="10" alignment="CENTER">
+               <Button fx:id="addButton" text="➕ Add Member" onAction="#addMember" 
+                      style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-min-width: 100;" />
+               <Button fx:id="updateButton" text="✏️ Update" onAction="#updateMember" disable="true"
+                      style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-min-width: 100;" />
+               <Button fx:id="deactivateButton" text="🚫 Deactivate" onAction="#deactivateMember" disable="true"
+                      style="-fx-background-color: #ff9800; -fx-text-fill: white; -fx-min-width: 100;" />
+            </HBox>
+
+            <!-- Member Status Information -->
+            <VBox spacing="5" style="-fx-background-color: #f9f9f9; -fx-padding: 10; -fx-background-radius: 5;">
+               <Label text="👤 Member Status" style="-fx-font-weight: bold;" />
+               <Label fx:id="memberStatusLabel" text="Ready to add new member" style="-fx-text-fill: #666;" />
+               <Label fx:id="memberSinceLabel" text="" style="-fx-text-fill: #666; -fx-font-size: 12px;" />
+               <Label fx:id="activeBooksLabel" text="" style="-fx-text-fill: #666; -fx-font-size: 12px;" />
+            </VBox>
+         </VBox>
+
+         <!-- Members Table Panel -->
+         <VBox spacing="15" style="-fx-padding: 20;">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+               <Label text="Members List" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+               <Label fx:id="memberCountLabel" text="(0 members)" style="-fx-text-fill: #666;" />
+               <CheckBox fx:id="showInactiveCheckBox" text="Show Inactive" onAction="#toggleInactiveMembers" />
+            </HBox>
+            
+            <TableView fx:id="membersTable" VBox.vgrow="ALWAYS">
+               <columns>
+                  <TableColumn fx:id="idColumn" text="Member ID" prefWidth="90" />
+                  <TableColumn fx:id="nameColumn" text="Full Name" prefWidth="180" />
+                  <TableColumn fx:id="emailColumn" text="Email" prefWidth="200" />
+                  <TableColumn fx:id="phoneColumn" text="Phone" prefWidth="120" />
+                  <TableColumn fx:id="statusColumn" text="Status" prefWidth="80" />
+               </columns>
+               <placeholder>
+                  <Label text="No members found. Click 'Add New Member' to get started." style="-fx-text-fill: #888;" />
+               </placeholder>
+            </TableView>
+
+            <!-- Quick Stats -->
+            <HBox spacing="20" alignment="CENTER" style="-fx-background-color: #f0fff0; -fx-padding: 10; -fx-background-radius: 5;">
+              
+               <VBox alignment="CENTER" spacing="2">
+                     <Label fx:id="totalMembersLabel" text="0" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #388E3C;" />
+                  <Label text="Total Members" style="-fx-font-size: 12px; -fx-text-fill: #666;" />
+               </VBox>
+               
+            </HBox>
+         </VBox>
+      </SplitPane>
+   </center>
+</BorderPane>

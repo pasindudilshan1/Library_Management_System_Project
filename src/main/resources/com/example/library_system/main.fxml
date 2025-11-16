@@ -1,10 +1,167 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<SplitPane dividerPositions="0.5" orientation="HORIZONTAL" prefHeight="241.0" prefWidth="548.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.12">
-    <fx:include source="members.fxml" />
-    <fx:include source="books.fxml" />
-    <fx:include source="issue.fxml" />
-    <fx:include source="Return.fxml"/>
-</SplitPane>
+<BorderPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.library_system.Controller.MainController">
+   <top>
+      <VBox>
+         <MenuBar>
+            <Menu text="File">
+               <MenuItem text="Exit" onAction="#exitApplication" />
+            </Menu>
+            <Menu text="Reports">
+               <MenuItem text="Overdue Books" onAction="#showOverdueReport" />
+               <MenuItem text="Library Statistics" onAction="#showStatistics" />
+            </Menu>
+            <Menu text="Help">
+               <MenuItem text="About" onAction="#showAbout" />
+            </Menu>
+         </MenuBar>
+         
+         <!-- Header -->
+         <HBox alignment="CENTER" style="-fx-background-color: #2E86AB; -fx-padding: 15;">
+            <Label text="📚 Library Management System" style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;" />
+         </HBox>
+      </VBox>
+   </top>
+
+   <center>
+      <TabPane tabClosingPolicy="UNAVAILABLE">
+         <!-- Dashboard Tab -->
+         <Tab text="🏠 Dashboard">
+            <VBox spacing="20" style="-fx-padding: 20;">
+               <Label text="Library Dashboard" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+               
+               <HBox spacing="20">
+                  <!-- Statistics Cards -->
+                  <VBox alignment="CENTER" spacing="10" style="-fx-background-color: #E3F2FD; -fx-padding: 20; -fx-background-radius: 10;">
+                     <Label fx:id="totalBooksLabel" text="0" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #1976D2;" />
+                     <Label text="Total Books" style="-fx-font-size: 14px;" />
+                  </VBox>
+                  
+                  <VBox alignment="CENTER" spacing="10" style="-fx-background-color: #E8F5E8; -fx-padding: 20; -fx-background-radius: 10;">
+                     <Label fx:id="totalMembersLabel" text="0" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #388E3C;" />
+                     <Label text="Active Members" style="-fx-font-size: 14px;" />
+                  </VBox>
+                  
+                  <VBox alignment="CENTER" spacing="10" style="-fx-background-color: #FFF3E0; -fx-padding: 20; -fx-background-radius: 10;">
+                     <Label fx:id="issuedBooksLabel" text="0" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #F57C00;" />
+                     <Label text="Books Issued" style="-fx-font-size: 14px;" />
+                  </VBox>
+                  
+                  <VBox alignment="CENTER" spacing="10" style="-fx-background-color: #FFEBEE; -fx-padding: 20; -fx-background-radius: 10;">
+                     <Label fx:id="overdueBooksLabel" text="0" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #D32F2F;" />
+                     <Label text="Overdue Books" style="-fx-font-size: 14px;" />
+                  </VBox>
+               </HBox>
+               
+              
+               
+            </VBox>
+         </Tab>
+
+         <!-- Books Management Tab -->
+         <Tab text="📚 Books Management">
+            <fx:include source="books.fxml" />
+         </Tab>
+
+         <!-- Members Management Tab -->
+         <Tab text="👥 Members Management">
+            <fx:include source="members.fxml" />
+         </Tab>
+
+         <!-- Issue Books Tab -->
+         <Tab text="📤 Issue Books">
+            <fx:include source="issue.fxml" />
+         </Tab>
+
+         <!-- Return Books Tab -->
+         <Tab text="📥 Return Books">
+            <fx:include source="Return.fxml" />
+         </Tab>
+
+         <!-- Available Books View Tab -->
+         <Tab text="📖 Available Books">
+            <VBox spacing="15" style="-fx-padding: 20;">
+               <HBox alignment="CENTER_LEFT" spacing="15">
+                  <Label text="Available Books" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+                  <TextField fx:id="availableBooksSearchField" promptText="Search books..." prefWidth="300" />
+                  <Button text="🔍 Search" onAction="#searchAvailableBooks" />
+                  <Button text="🔄 Refresh" onAction="#refreshAvailableBooks" />
+               </HBox>
+               
+               <TableView fx:id="availableBooksTable">
+                  <columns>
+                     <TableColumn fx:id="availableBookIdColumn" text="Book ID" prefWidth="80" />
+                     <TableColumn fx:id="availableBookTitleColumn" text="Title" prefWidth="200" />
+                     <TableColumn fx:id="availableBookAuthorColumn" text="Author" prefWidth="150" />
+                     <TableColumn fx:id="availableBookGenreColumn" text="Genre" prefWidth="120" />
+                     <TableColumn fx:id="availableBookCopiesColumn" text="Available/Total" prefWidth="120" />
+                     <TableColumn fx:id="availableBookISBNColumn" text="ISBN" prefWidth="130" />
+                  </columns>
+               </TableView>
+            </VBox>
+         </Tab>
+
+         <!-- Issued Books View Tab -->
+         <Tab text="📋 Issued Books">
+            <VBox spacing="15" style="-fx-padding: 20;">
+               <HBox alignment="CENTER_LEFT" spacing="15">
+                  <Label text="Currently Issued Books" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+                  <TextField fx:id="issuedBooksSearchField" promptText="Search by book or member..." prefWidth="300" />
+                  <Button text="🔍 Search" onAction="#searchIssuedBooks" />
+                  <Button text="🔄 Refresh" onAction="#refreshIssuedBooks" />
+                  <Button text="⚠️ Show Overdue Only" onAction="#showOverdueOnly" style="-fx-background-color: #ffcccb;" />
+               </HBox>
+               
+               <TableView fx:id="issuedBooksTable">
+                  <columns>
+                     <TableColumn fx:id="issuedBookIdColumn" text="Book ID" prefWidth="80" />
+                     <TableColumn fx:id="issuedBookTitleColumn" text="Book Title" prefWidth="180" />
+                     <TableColumn fx:id="issuedMemberIdColumn" text="Member ID" prefWidth="90" />
+                     <TableColumn fx:id="issuedMemberNameColumn" text="Member Name" prefWidth="150" />
+                     <TableColumn fx:id="issuedDateColumn" text="Issue Date" prefWidth="100" />
+                     <TableColumn fx:id="dueDateColumn" text="Due Date" prefWidth="100" />
+                     <TableColumn fx:id="daysOverdueColumn" text="Days Overdue" prefWidth="100" />
+                     <TableColumn fx:id="fineAmountColumn" text="Fine (Rs.)" prefWidth="80" />
+                     <TableColumn fx:id="statusColumn" text="Status" prefWidth="90" />
+                  </columns>
+               </TableView>
+            </VBox>
+         </Tab>
+
+         <!-- Active Members View Tab -->
+         <Tab text="👤 Active Members">
+            <VBox spacing="15" style="-fx-padding: 20;">
+               <HBox alignment="CENTER_LEFT" spacing="15">
+                  <Label text="Library Members" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+                  <TextField fx:id="membersSearchField" promptText="Search members..." prefWidth="300" />
+                  <Button text="🔍 Search" onAction="#searchMembers" />
+                  <Button text="🔄 Refresh" onAction="#refreshMembers" />
+                  <CheckBox fx:id="showInactiveMembersCheckbox" text="Show Inactive Members" onAction="#toggleInactiveMembers" />
+               </HBox>
+               
+               <TableView fx:id="membersViewTable">
+                  <columns>
+                     <TableColumn fx:id="memberIdViewColumn" text="Member ID" prefWidth="90" />
+                     <TableColumn fx:id="memberNameViewColumn" text="Full Name" prefWidth="180" />
+                     <TableColumn fx:id="memberEmailViewColumn" text="Email" prefWidth="200" />
+                     <TableColumn fx:id="memberPhoneViewColumn" text="Phone" prefWidth="120" />
+                     <TableColumn fx:id="memberJoinDateColumn" text="Join Date" prefWidth="100" />
+                     <TableColumn fx:id="memberActiveIssuesColumn" text="Books Issued" prefWidth="100" />
+                     <TableColumn fx:id="memberStatusViewColumn" text="Status" prefWidth="80" />
+                  </columns>
+               </TableView>
+            </VBox>
+         </Tab>
+      </TabPane>
+   </center>
+
+   <bottom>
+      <HBox alignment="CENTER" style="-fx-background-color: #f5f5f5; -fx-padding: 10;">
+         <Label fx:id="statusLabel" text="Ready" style="-fx-text-fill: #666;" />
+      </HBox>
+   </bottom>
+</BorderPane>
